@@ -1,0 +1,67 @@
+@CHARSET "UTF-8";
+
+#container{
+	width: 90%;
+	margin-left: auto;
+	margin-right:auto;
+	
+}
+#top{
+	width: 100%;
+	height: 25%;
+	border:1px solid black;	
+}
+#top iframe{
+	width:100%;
+	height:100%;
+	border: 0px;
+}
+#left{
+	width: 25%;
+	height: 110%;
+	float: left;
+	border:1px solid green;
+}
+#leftUp{
+	width: 100%;
+	height: 50%;
+	border:1px solid black;	
+	margin:1px 0px 0px 0px;
+}
+#leftUp iframe{
+	width:100%;
+	height:100%;
+	border:0px;
+}
+#leftDown{
+	width: 100%;
+	height: 49%;
+	border:1px solid black;	
+}
+#leftDown iframe{
+	width:100%;
+	height:100%;
+	border: 0px;
+}
+#right{
+	width: 74%;
+	height:110%;
+	float: right;	
+	border:1px solid green;	
+}
+#right iframe{
+	width:100%;
+	height:100%;
+	border: 0px;
+}
+#end{
+	width: 100%;
+	height: 10%;
+	float: left;
+	border:1px solid black;	
+}
+#end iframe{
+	width:100%;
+	height:100%;
+	border: 0px;
+}

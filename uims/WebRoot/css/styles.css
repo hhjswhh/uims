@@ -1,0 +1,75 @@
+@CHARSET "UTF-8";
+#container{
+	width: 1000px;
+}
+
+#container div{
+	border: 1px solid blue;
+	margin: 2px;
+	padding: 2px;
+}
+
+#top{
+	height: 60px;
+}
+
+#top iframe{
+	height: 60px;
+	border: 0px;
+}
+
+#left{
+	
+	width: 180px;
+	height: 450px;
+	float: left;
+}
+
+#left iframe{
+	
+	width: 180px;
+	height: 450px;
+	float: left;
+	border: 0px;
+}
+
+#middle{
+	
+	width: 650px;
+	height: 450px;
+	float: left;
+}
+
+#middle iframe{
+	
+	width: 650px;
+	height: 450px;
+	float: left;
+	border: 0px;
+}
+
+#right{
+	
+	width: 140px;
+	height: 450px;
+	float: left;
+}
+
+#right iframe{
+	
+	width: 140px;
+	height: 450px;
+	float: left;
+	border: 0px;
+}
+
+#foot{
+	height: 50px;
+	clear: both;
+}
+
+#foot iframe{
+	height: 50px;
+	clear: both;
+	border: 0px;
+}
