@@ -9,7 +9,6 @@ import com.sdu.uims.comm.DBUtil;
 import com.sdu.uims.vo.User;
 
 public class UserDao {
-	DBUtil db = new DBUtil();
 	 /**
 	 * @param ph
 	 *            根据手机号获取用户信息
@@ -19,9 +18,10 @@ public class UserDao {
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		User user = null;
-		String sql = "select * from T_SYS_USER where m_ph='" + ph + "';";
+		String sql = "select * from T_SYS_USER where m_ph=?;";
 		try {
-			pstm = db.getConPst(sql);
+			pstm = DBUtil.getConPst(sql);
+			pstm.setString(1, ph);
 			rs = pstm.executeQuery();
 
 			user = new User();
@@ -40,7 +40,7 @@ public class UserDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			db.close(pstm, rs);
+			DBUtil.close(pstm, rs);
 		}
 		return user;
 	}
@@ -66,9 +66,10 @@ public class UserDao {
 		if (!newPwd1.equals(newPwd2)) {// 两次密码输入不正确
 			return "NotSame";
 		} else {
-			String sql = "select m_pwd from T_SYS_USER where m_ph='" + ph + "';";
+			String sql = "select m_pwd from T_SYS_USER where m_ph=?;";
 			try {
-				pstm = db.getConPst(sql);
+				pstm = DBUtil.getConPst(sql);
+				pstm.setString(1, ph);
 				pstm.execute();
 				rs = pstm.getResultSet();
 				rs.next();
@@ -84,7 +85,7 @@ public class UserDao {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
-				db.close(pstm, rs);
+				DBUtil.close(pstm, rs);
 			}
 		}
 
@@ -104,11 +105,12 @@ public class UserDao {
 	public String changePwd(String ph, String newPwd) {
 		PreparedStatement pstm = null;
 		int result = -10;
-		String sql = "UPDATE T_SYS_USER SET m_pwd='" + newPwd
-				+ "' WHERE m_ph='" + ph + "';";
+		String sql = "UPDATE T_SYS_USER SET m_pwd=? WHERE m_ph=?;";
 
 		try {
-			pstm = db.getConPst(sql);
+			pstm = DBUtil.getConPst(sql);
+			pstm.setString(1, newPwd);
+			pstm.setString(2, ph);
 			pstm.execute();
 			result = pstm.getUpdateCount();
 			if (result > 0) {
@@ -120,7 +122,7 @@ public class UserDao {
 			// TODO: handle exception
 			e.printStackTrace();
 		} finally {
-			db.close(pstm, null);
+			DBUtil.close(pstm, null);
 		}
 
 		return "changeError";
@@ -150,18 +152,16 @@ public class UserDao {
 
 		PreparedStatement pstm = null;
 		int result = -10;
-		char sex = '1';
-		if("male".equals(userSex)){
-			sex = '0';
-		}else{
-			sex = '1';
-		}
-		String sql = "UPDATE T_SYS_USER SET m_name='" + username + "', m_sex='"
-				+ sex + "', m_mail='" + userMail + "', m_addr='" + userAddr
-				+ "', m_img='" + userImg + "' WHERE m_ph='" + userPhn + "';";
+		String sql = "UPDATE T_SYS_USER SET m_name=?, m_sex=?, m_mail=?, m_addr=?, m_img=? WHERE m_ph=?;";
 
 		try {
-			pstm = db.getConPst(sql);
+			pstm = DBUtil.getConPst(sql);
+			pstm.setString(1, username);
+			pstm.setString(2, userSex);
+			pstm.setString(3, userMail);
+			pstm.setString(4, userAddr);
+			pstm.setString(5, userImg);
+			pstm.setString(6, userPhn);
 			pstm.execute();
 			result = pstm.getUpdateCount();
 			if (result > 0) {
@@ -173,7 +173,7 @@ public class UserDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			db.close(pstm, null);
+			DBUtil.close(pstm, null);
 		}
 
 		return "changeError";

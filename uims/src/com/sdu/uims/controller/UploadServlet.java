@@ -122,7 +122,7 @@ public class UploadServlet extends HttpServlet {
 			} catch (Exception ex) {
 				request.setAttribute("message", "错误信息: " + ex.getMessage());
 			}
-			// 跳转到 message.jsp
+			// 跳转到 message.jsp------------------------------修改此处跳转路径
 			getServletContext().getRequestDispatcher("/message.jsp").forward(
 					request, response);
 			return;

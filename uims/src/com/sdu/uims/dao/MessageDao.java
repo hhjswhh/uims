@@ -4,27 +4,25 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
-
 import com.sdu.uims.comm.DBUtil;
-import com.sdu.uims.vo.Info;
 import com.sdu.uims.vo.Message;
 
 public class MessageDao {
-	DBUtil db = new DBUtil();
 	
-	public Message[] showList(String sql){
-		
-		return null;
-	}
-	
+	/**
+     * 分页获取当前用户的消息列表
+     * @author 蔡一玮
+     * @param  page 当前页   id  用户手机号
+     * @return  返回一个包含Message的List 
+     */
 	public ArrayList<Message> findByPage(int page, String id) {
-        DBUtil db = new DBUtil();
         int begin = (page-1) * 5;//数据库查找的数量，即根据每页显示信息多少及当前页面为第几页确定从数据表中第几行开始找
-        String sql = "select * from T_SYS_MESSAGE where m_ph='"+id+"' limit "+begin+",5;";//每次查找 5 个，即每页显示的数量为 5 
+        String sql = "select * from T_SYS_MESSAGE where m_ph=? limit "+begin+",5;";//每次查找 5 个，即每页显示的数量为 5 
         ArrayList<Message> list = new ArrayList<Message>();
         try {
-        	ResultSet rs = db.getConPst(sql).executeQuery();
+        	PreparedStatement pstm = DBUtil.getConPst(sql);
+        	pstm.setString(1, id);
+        	ResultSet rs = pstm.executeQuery();
             while(rs.next()){
             	Message msg = new Message();
             	msg.setDate(rs.getString("m_date"));
@@ -39,13 +37,19 @@ public class MessageDao {
         }
         return list;
     }
-    
+	/**
+     * 获取当前用户的消息总数
+     * @author 蔡一玮
+     * @param  id 用户手机号
+     * @return  返回值为一个int值表示 
+     */
     public int messageCount(String id){
-        DBUtil db = new DBUtil();
-        String sql = "select count(*) from T_SYS_MESSAGE where m_ph='"+id+"';";
+        String sql = "select count(*) from T_SYS_MESSAGE where m_ph=?;";
         int count = 0;
         try {
-        	ResultSet rs = db.getConPst(sql).executeQuery();
+        	PreparedStatement pstm = DBUtil.getConPst(sql);
+        	pstm.setString(1, id);
+        	ResultSet rs = pstm.executeQuery();
             rs.next();
             count = rs.getInt(1);
         } catch (SQLException e) {

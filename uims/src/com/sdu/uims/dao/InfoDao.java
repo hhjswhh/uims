@@ -55,9 +55,15 @@ public class InfoDao {
     	return inList;
     }
     
+    /**
+     * 分页获取当前用户的历史发布列表
+     * @author 蔡一玮
+     * @param page 当前页数  ，id 用户手机号
+     * @return  返回一个包含了消息的list 
+     */
     public ArrayList<Info> findByPage(int page, String id) {
         int begin = (page-1) * 5;//根据传入的page确定查询开始位置
-        String sql = "select * from T_UIMS_INFO where m_ph='?' limit "+begin+",5;";//查询语句，通过手机号并从开始位置查找5条语句
+        String sql = "select * from T_UIMS_INFO where m_ph=? limit "+begin+",5;";//查询语句，通过手机号并从开始位置查找5条语句
         ArrayList<Info> list = new ArrayList<Info>();
         try {
         	PreparedStatement pstm = DBUtil.getConPst(sql);
@@ -84,12 +90,19 @@ public class InfoDao {
         }
         return list;
     }
+    /**
+     * 获取当前用户的历史发布总数
+     * @author 蔡一玮
+     * @param String   用户手机号
+     * @return  返回值为一个int值表示 
+     */
     public int infoCount(String id){
-        DBUtil db = new DBUtil();
-        String sql = "select count(*) from T_UIMS_INFO where m_ph='"+id+"';";
+        String sql = "select count(*) from T_UIMS_INFO where m_ph=?;";
+        PreparedStatement pstm = DBUtil.getConPst(sql);
         int count = 0;
         try {
-        	ResultSet rs = db.getConPst(sql).executeQuery();
+        	pstm.setString(1, id);
+        	ResultSet rs = pstm.executeQuery();
             rs.next();
             count = rs.getInt(1);
         } catch (SQLException e) {
