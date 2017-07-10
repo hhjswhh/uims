@@ -10,7 +10,7 @@ public class DBUtil {
 	private static final String DRIVER="com.mysql.jdbc.Driver";
 	private static final String URL="jdbc:mysql://localhost/uims?useUnicode=true&characterEncoding=UTF-8&mysqlEncoding=utf8";
 	private static final String USER="root";
-	private static final String PASS="mysql";
+	private static final String PASS="123456";
 	private static Connection con =null;
 	static{
 		//1.加载数据库驱动

@@ -23,13 +23,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <body>
    			<div id="navigateBar">
   				<div id="logo">logo</div>
-  				<div id="homePage" class="classifedPart">a</div>
-  				<div id="cruit" class="classifedPart">b</div>
-  				<div id="teach" class="classifedPart">c</div>
-  				<div id="transction" class="classifedPart">d</div>
-  				<div id="employee" class="classifedPart">e</div>
-  				<div id="search" class="classifedPart">f</div>
-  				<div id="investment" class="classifedPart">g</div>
+  				<div id="homePage" class="classifedPart">首页</div>
+  				<div id="cruit" class="classifedPart">招聘</div>
+  				<div id="teach" class="classifedPart">培训</div>
+  				<div id="transction" class="classifedPart">交易</div>
+  				<div id="employee" class="classifedPart">求职</div>
+  				<div id="search" class="classifedPart">寻找</div>
+  				<div id="investment" class="classifedPart">招商引资</div>
   			</div>
   			<div id="advertiseBar">
   				advertisement

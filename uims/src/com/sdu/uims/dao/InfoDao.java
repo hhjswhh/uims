@@ -13,55 +13,56 @@ import com.sdu.uims.vo.Sort;
 public class InfoDao {
 	/**
 	 * 
-	 * @param type  ���յĲ�ѯ��ݿ����Ͳ���
-	 * @return   ����һ����ѯ��Ľ��
+	 * @param type  锟斤拷锟秸的诧拷询锟斤拷菘锟斤拷锟斤拷筒锟斤拷锟�
+	 * @return   锟斤拷锟斤拷一锟斤拷锟斤拷询锟斤拷慕锟斤拷
 	 */
     public static List<Info> getRS(String type){
     	/**
-    	 * rs���ڱ���prepareStatement(sql)��ѯ��Ľ��
+    	 * rs锟斤拷锟节憋拷锟斤拷prepareStatement(sql)锟斤拷询锟斤拷慕锟斤拷
     	 */
     	ResultSet rs=null;
     	PreparedStatement ps=null;
     	List<Info> inList=null;
     	/**
-    	 * ʹ��ռλ�����SQL�����������ռλ��ֵ
-    	 * sql���
-    	 * ���ڲ�ѯ��Ҫʹ�õ������
+    	 * 使锟斤拷占位锟斤拷锟斤拷锟絊QL锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟秸嘉伙拷锟街�
+    	 * sql锟斤拷锟�
+    	 * 锟斤拷锟节诧拷询锟斤拷要使锟矫碉拷锟斤拷锟斤拷锟�
     	 */
     	String sql="select * from t_uims_info where m_type=?";
     	  try {
-    		  ps=DBUtil.getConPst(sql);//��ȡPreparedStatement����
-    		    ps.setString(1, type);//Ϊ��һ������ֵ
+    		  ps=DBUtil.getConPst(sql);//锟斤拷取PreparedStatement锟斤拷锟斤拷
+    		    ps.setString(1, type);//为锟斤拷一锟斤拷锟斤拷锟斤拷值
 			  rs=ps.executeQuery();
-			  //ʵ��һ��List�б?���������ѯ��ݵĽ��
+			  //实锟斤拷一锟斤拷List锟叫�锟斤拷锟斤拷锟斤拷锟斤拷锟窖拷锟捷的斤拷锟�
 			  inList = new ArrayList<Info>();
 				while(rs.next()){
 					  Info info=new Info();
-					  //��ID���ں�����о�����Ϣ�Ĳ�ѯ���������б�����ʾ����Ҫ�������ӵĲ���
+					  //锟斤拷ID锟斤拷锟节猴拷锟斤拷锟斤拷芯锟斤拷锟斤拷锟较拷牟锟窖拷锟斤拷锟斤拷锟斤拷锟斤拷斜锟斤拷锟斤拷锟绞撅拷锟斤拷锟揭拷锟斤拷锟斤拷锟斤拷拥牟锟斤拷锟�
 					  info.setId(rs.getInt("m_id"));
 					  info.setType(rs.getString("m_type"));
 					  info.setTitle(rs.getString("m_title"));
 					  info.setDate(rs.getString("m_date"));
 					  info.setName(rs.getString("m_name"));				  
-					  inList.add(info);//������д��list��
+					  inList.add(info);//锟斤拷锟斤拷锟斤拷写锟斤拷list锟斤拷
 				  }
-				DBUtil.close(ps,rs);//�ر�rs ,ps,con
+				DBUtil.close(ps,rs);//锟截憋拷rs ,ps,con
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
 		}
-    	  //���ز�ѯ����ݽ�����
+    	  //锟斤拷锟截诧拷询锟斤拷锟斤拷萁锟斤拷锟斤拷锟�
     	return inList;
     }
     
     public ArrayList<Info> findByPage(int page, String id) {
-        DBUtil db = new DBUtil();
-        int begin = (page-1) * 5;//Êý¾Ý¿â²éÕÒµÄÊýÁ¿£¬¼´¸ù¾ÝÃ¿Ò³ÏÔÊ¾ÐÅÏ¢¶àÉÙ¼°µ±Ç°Ò³ÃæÎªµÚ¼¸Ò³È·¶¨´ÓÊý¾Ý±íÖÐµÚ¼¸ÐÐ¿ªÊ¼ÕÒ
-        String sql = "select * from T_UIMS_INFO where m_ph='"+id+"' limit "+begin+",5;";//Ã¿´Î²éÕÒ 5 ¸ö£¬¼´Ã¿Ò³ÏÔÊ¾µÄÊýÁ¿Îª 5 
+        int begin = (page-1) * 5;//根据传入的page确定查询开始位置
+        String sql = "select * from T_UIMS_INFO where m_ph='?' limit "+begin+",5;";//查询语句，通过手机号并从开始位置查找5条语句
         ArrayList<Info> list = new ArrayList<Info>();
         try {
-        	ResultSet rs = db.getConPst(sql).executeQuery();
+        	PreparedStatement pstm = DBUtil.getConPst(sql);
+        	pstm.setString(1, id);
+        	ResultSet rs = pstm.executeQuery();
             while(rs.next()){
                 Info info = new Info();
                 info.setId(rs.getInt("m_id"));
@@ -83,9 +84,9 @@ public class InfoDao {
         }
         return list;
     }
-    public int infoCount(){
+    public int infoCount(String id){
         DBUtil db = new DBUtil();
-        String sql = "select count(*) from T_UIMS_INFO";
+        String sql = "select count(*) from T_UIMS_INFO where m_ph='"+id+"';";
         int count = 0;
         try {
         	ResultSet rs = db.getConPst(sql).executeQuery();
@@ -99,23 +100,23 @@ public class InfoDao {
     }
 public static List searchInfo(String searchword){
 		
-		String Search = searchword;//»ñÈ¡´«µÝÀ´µÄ¹Ø¼ü×Ö
+		String Search = searchword;//禄帽脠隆麓芦碌脻脌麓碌脛鹿脴录眉脳脰
 		
 		String sql="select * from t_uims_info";
 		
 		ResultSet rs=null;
 		
-		int m_id;//ÐÅÏ¢id
-		String tilte;//ÐÅÏ¢±êÌâ
-		String context;//ÐÅÏ¢ÄÚÈÝ
-		String date;//ÐÅÏ¢Ê±¼ä
+		int m_id;//脨脜脧垄id
+		String tilte;//脨脜脧垄卤锚脤芒
+		String context;//脨脜脧垄脛脷脠脻
+		String date;//脨脜脧垄脢卤录盲
 		
-		String tiltearray[] = new String[1000000];//´æÈë±êÌâÊý×é
-		int arrayindex=0;//´æ´¢Êý×éµÄÏÂ±ê
-		//ÉùÃ÷list£¬ÓÃÓÚÎ´ÅÅÐòµÄ½á¹û¼¯
+		String tiltearray[] = new String[1000000];//麓忙脠毛卤锚脤芒脢媒脳茅
+		int arrayindex=0;//麓忙麓垄脢媒脳茅碌脛脧脗卤锚
+		//脡霉脙梅list拢卢脫脙脫脷脦麓脜脜脨貌碌脛陆谩鹿没录炉
         List<Info> sumans = new ArrayList<Info>();
 		try {
-			//´ÓÊý¾Ý¿âÖÐ²éÕÒ³öÈ«²¿Êý¾Ý
+			//麓脫脢媒戮脻驴芒脰脨虏茅脮脪鲁枚脠芦虏驴脢媒戮脻
 			rs = DBUtil.getConPst(sql).executeQuery();
 			while(rs.next())
 			{
@@ -138,22 +139,22 @@ public static List searchInfo(String searchword){
 			e.printStackTrace();
 		}
 		    
-		//ÉùÃ÷ÏàËÆ¶ÈÊý×é
+		//脡霉脙梅脧脿脣脝露脠脢媒脳茅
         float index[]=new float[arrayindex];
-        //ÉùÃ÷list£¬ÓÃÓÚ²ÎÓëÏàËÆ¶È±È½Ï
+        //脡霉脙梅list拢卢脫脙脫脷虏脦脫毛脧脿脣脝露脠卤脠陆脧
         List<Sort> al = new ArrayList<Sort>();
         
-        //aiÓÃÓÚÈ¥³ýÏàËÆ¶ÈÎª0µÄÊý¾Ý
+        //ai脫脙脫脷脠楼鲁媒脧脿脣脝露脠脦陋0碌脛脢媒戮脻
         int ai=arrayindex;
-        //ÕÒ³öÃ¿¸ö±êÌâµÄÏàËÆ¶È£¬²¢±£´æÔÚindexÊý×éÖÐ
+        //脮脪鲁枚脙驴赂枚卤锚脤芒碌脛脧脿脣脝露脠拢卢虏垄卤拢麓忙脭脷index脢媒脳茅脰脨
         for(int i=0;i<arrayindex;i++)
         {
-        	//»ñÈ¡ÏÂ±íÎªiµÄÏàËÆ¶È
+        	//禄帽脠隆脧脗卤铆脦陋i碌脛脧脿脣脝露脠
         	index[i]=levenshtein(Search,tiltearray[i]);
-        	System.out.println("ÏàËÆ¶È£º"+index[i]);
+        	System.out.println("脧脿脣脝露脠拢潞"+index[i]);
         	if(index[i]==0)
         	{
-        		System.out.println("ÏàËÆ¶ÈÎª0");
+        		System.out.println("脧脿脣脝露脠脦陋0");
         		Sort a=new Sort();
             	a.setSimilarity(index[i]);
             	a.setId(i);
@@ -166,16 +167,16 @@ public static List searchInfo(String searchword){
         arrayindex=ai;
        
         sort(index,0,arrayindex-1);
-        System.out.println("ÐòÁÐÎª£º");
+        System.out.println("脨貌脕脨脦陋拢潞");
         for(int i=0;i<arrayindex;i++)
         {
         	//al[i].g
         	System.out.println(index[i]);
         }
         
-        //ÉùÃ÷list£¬ÓÃÓÚ±£´æÒÑÅÅÐòµÄ½á¹û¼¯
+        //脡霉脙梅list拢卢脫脙脫脷卤拢麓忙脪脩脜脜脨貌碌脛陆谩鹿没录炉
         List<Info> ans = new ArrayList<Info>();
-        System.out.println("idÎª£º");
+        System.out.println("id脦陋拢潞");
         for(int j=arrayindex-1;j>=0;j--)
         {
         	for(int i=0;i<al.size();i++){
@@ -195,21 +196,21 @@ public static List searchInfo(String searchword){
         }
         return ans;
     }
-	//ÅÐ¶ÏÏàËÆ¶È
+	//脜脨露脧脧脿脣脝露脠
 	public static float levenshtein(String str1,String str2) {    
-        //¼ÆËãÁ½¸ö×Ö·û´®µÄ³¤¶È¡£    
+        //录脝脣茫脕陆赂枚脳脰路没麓庐碌脛鲁陇露脠隆拢    
         int len1 = str1.length();    
         int len2 = str2.length();    
-        //½¨Á¢ÉÏÃæËµµÄÊý×é£¬±È×Ö·û³¤¶È´óÒ»¸ö¿Õ¼ä    
+        //陆篓脕垄脡脧脙忙脣碌碌脛脢媒脳茅拢卢卤脠脳脰路没鲁陇露脠麓贸脪禄赂枚驴脮录盲    
         int[][] dif = new int[len1 + 1][len2 + 1];    
-        //¸³³õÖµ£¬²½ÖèB¡£    
+        //赂鲁鲁玫脰碌拢卢虏陆脰猫B隆拢    
         for (int a = 0; a <= len1; a++) {    
             dif[a][0] = a;    
         }    
         for (int a = 0; a <= len2; a++) {    
             dif[0][a] = a;    
         }    
-        //¼ÆËãÁ½¸ö×Ö·ûÊÇ·ñÒ»Ñù£¬¼ÆËã×óÉÏµÄÖµ    
+        //录脝脣茫脕陆赂枚脳脰路没脢脟路帽脪禄脩霉拢卢录脝脣茫脳贸脡脧碌脛脰碌    
         int temp;    
         for (int i = 1; i <= len1; i++) {    
             for (int j = 1; j <= len2; j++) {    
@@ -218,20 +219,20 @@ public static List searchInfo(String searchword){
                 } else {    
                     temp = 1;    
                 }    
-                //È¡Èý¸öÖµÖÐ×îÐ¡µÄ    
+                //脠隆脠媒赂枚脰碌脰脨脳卯脨隆碌脛    
                 dif[i][j] = min(dif[i - 1][j - 1] + temp, dif[i][j - 1] + 1,    
                         dif[i - 1][j] + 1);    
             }    
         }    
-        //System.out.println("×Ö·û´®\""+str1+"\"Óë\""+str2+"\"µÄ±È½Ï");    
-        //È¡Êý×éÓÒÏÂ½ÇµÄÖµ£¬Í¬Ñù²»Í¬Î»ÖÃ´ú±í²»Í¬×Ö·û´®µÄ±È½Ï    
-        //System.out.println("²îÒì²½Öè£º"+dif[len1][len2]);    
-        //¼ÆËãÏàËÆ¶È    
+        //System.out.println("脳脰路没麓庐\""+str1+"\"脫毛\""+str2+"\"碌脛卤脠陆脧");    
+        //脠隆脢媒脳茅脫脪脧脗陆脟碌脛脰碌拢卢脥卢脩霉虏禄脥卢脦禄脰脙麓煤卤铆虏禄脥卢脳脰路没麓庐碌脛卤脠陆脧    
+        //System.out.println("虏卯脪矛虏陆脰猫拢潞"+dif[len1][len2]);    
+        //录脝脣茫脧脿脣脝露脠    
         float similarity =1 - (float) dif[len1][len2] / Math.max(str1.length(), str2.length());    
-        //System.out.println("ÏàËÆ¶È£º"+similarity);
+        //System.out.println("脧脿脣脝露脠拢潞"+similarity);
         return similarity;
     }
-	//µÃµ½×îÐ¡Öµ    
+	//碌脙碌陆脳卯脨隆脰碌    
     private static int min(int... is) {    
         int min = Integer.MAX_VALUE;    
         for (int i : is) {    
@@ -248,44 +249,44 @@ public static List searchInfo(String searchword){
          
          
          while(end>start){
-             //´ÓºóÍùÇ°±È½Ï
-             while(end>start&&a[end]>=key)  //Èç¹ûÃ»ÓÐ±È¹Ø¼üÖµÐ¡µÄ£¬±È½ÏÏÂÒ»¸ö£¬Ö±µ½ÓÐ±È¹Ø¼üÖµÐ¡µÄ½»»»Î»ÖÃ£¬È»ºóÓÖ´ÓÇ°Íùºó±È½Ï
+             //麓脫潞贸脥霉脟掳卤脠陆脧
+             while(end>start&&a[end]>=key)  //脠莽鹿没脙禄脫脨卤脠鹿脴录眉脰碌脨隆碌脛拢卢卤脠陆脧脧脗脪禄赂枚拢卢脰卤碌陆脫脨卤脠鹿脴录眉脰碌脨隆碌脛陆禄禄禄脦禄脰脙拢卢脠禄潞贸脫脰麓脫脟掳脥霉潞贸卤脠陆脧
                  end--;
              if(a[end]<=key){
             	 float temp = a[end];
                  a[end] = a[start];
                  a[start] = temp;
              }
-             //´ÓÇ°Íùºó±È½Ï
-             while(end>start&&a[start]<=key)//Èç¹ûÃ»ÓÐ±È¹Ø¼üÖµ´óµÄ£¬±È½ÏÏÂÒ»¸ö£¬Ö±µ½ÓÐ±È¹Ø¼üÖµ´óµÄ½»»»Î»ÖÃ
+             //麓脫脟掳脥霉潞贸卤脠陆脧
+             while(end>start&&a[start]<=key)//脠莽鹿没脙禄脫脨卤脠鹿脴录眉脰碌麓贸碌脛拢卢卤脠陆脧脧脗脪禄赂枚拢卢脰卤碌陆脫脨卤脠鹿脴录眉脰碌麓贸碌脛陆禄禄禄脦禄脰脙
                 start++;
              if(a[start]>=key){
             	 float temp = a[start];
                  a[start] = a[end];
                  a[end] = temp;
              }
-         //´ËÊ±µÚÒ»´ÎÑ­»·±È½Ï½áÊø£¬¹Ø¼üÖµµÄÎ»ÖÃÒÑ¾­È·¶¨ÁË¡£×ó±ßµÄÖµ¶¼±È¹Ø¼üÖµÐ¡£¬ÓÒ±ßµÄÖµ¶¼±È¹Ø¼üÖµ´ó£¬µ«ÊÇÁ½±ßµÄË³Ðò»¹ÓÐ¿ÉÄÜÊÇ²»Ò»ÑùµÄ£¬½øÐÐÏÂÃæµÄµÝ¹éµ÷ÓÃ
+         //麓脣脢卤碌脷脪禄麓脦脩颅禄路卤脠陆脧陆谩脢酶拢卢鹿脴录眉脰碌碌脛脦禄脰脙脪脩戮颅脠路露篓脕脣隆拢脳贸卤脽碌脛脰碌露录卤脠鹿脴录眉脰碌脨隆拢卢脫脪卤脽碌脛脰碌露录卤脠鹿脴录眉脰碌麓贸拢卢碌芦脢脟脕陆卤脽碌脛脣鲁脨貌禄鹿脫脨驴脡脛脺脢脟虏禄脪禄脩霉碌脛拢卢陆酶脨脨脧脗脙忙碌脛碌脻鹿茅碌梅脫脙
          }
-         //µÝ¹é
-         if(start>low) sort(a,low,start-1);//×ó±ßÐòÁÐ¡£µÚÒ»¸öË÷ÒýÎ»ÖÃµ½¹Ø¼üÖµË÷Òý-1
-         if(end<high) sort(a,end+1,high);//ÓÒ±ßÐòÁÐ¡£´Ó¹Ø¼üÖµË÷Òý+1µ½×îºóÒ»¸ö
+         //碌脻鹿茅
+         if(start>low) sort(a,low,start-1);//脳贸卤脽脨貌脕脨隆拢碌脷脪禄赂枚脣梅脪媒脦禄脰脙碌陆鹿脴录眉脰碌脣梅脪媒-1
+         if(end<high) sort(a,end+1,high);//脫脪卤脽脨貌脕脨隆拢麓脫鹿脴录眉脰碌脣梅脪媒+1碌陆脳卯潞贸脪禄赂枚
      }
     public static List<Info> getRst(String id){
  	   ResultSet rs=null;
  	  PreparedStatement ps=null;
  	 List<Info> spList=null;
  	   /**
- 	    * ʹ��ռλ���SQL���������������ռλ��ֵ
- 	    * �����Ϣid��ѯ��Ϣ�ľ�������
+ 	    * 使锟斤拷占位锟斤拷锟絊QL锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟秸嘉伙拷锟街�
+ 	    * 锟斤拷锟斤拷锟较d锟斤拷询锟斤拷息锟侥撅拷锟斤拷锟斤拷锟斤拷
  	    */
  	     String sql="select * from t_uims_info where m_id=?";
  	     int ID=Integer.parseInt(id);
  	   
  	     try {
- 	    	ps= DBUtil.getConPst(sql);  //��ȡ PreparedStatement����
- 	    	 ps.setInt(1,ID);  	//Ϊ��һ��������и�ֵ    	 
+ 	    	ps= DBUtil.getConPst(sql);  //锟斤拷取 PreparedStatement锟斤拷锟斤拷
+ 	    	 ps.setInt(1,ID);  	//为锟斤拷一锟斤拷锟斤拷锟斤拷锟斤拷懈锟街�   	 
 				rs=ps.executeQuery();
-				 //ʵ��һ��List�б?���������ѯ��ݵĽ��
+				 //实锟斤拷一锟斤拷List锟叫�锟斤拷锟斤拷锟斤拷锟斤拷锟窖拷锟捷的斤拷锟�
 				 spList = new ArrayList<Info>();
 					while(rs.next()){
 						  Info info=new Info();
@@ -295,9 +296,9 @@ public static List searchInfo(String searchword){
 						  info.setPhone(rs.getString("m_ph"));
 						  info.setName(rs.getString("m_name"));
 						  info.setMail(rs.getString("m_mail"));  
-						  spList.add(info);//������д��list��
+						  spList.add(info);//锟斤拷锟斤拷锟斤拷写锟斤拷list锟斤拷
 					  }
-					DBUtil.close(ps,rs);//�ر�rs,ps,con
+					DBUtil.close(ps,rs);//锟截憋拷rs,ps,con
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -309,20 +310,20 @@ public static List searchInfo(String searchword){
  	   PreparedStatement ps=null;
  	  List<Info> simList=null;
  	   /**
- 	    * ʹ��ռλ���sql���������������ռλ��ֵ
- 	    * ��ݾ�����Ϣ���ڵ����ͣ���ѯ��þ�����Ϣ֮���ͬ������Ϣ
- 	    * ��ʱ����н�������
- 	    * ֻȡǰʮ����Ϣ
+ 	    * 使锟斤拷占位锟斤拷锟絪ql锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟秸嘉伙拷锟街�
+ 	    * 锟斤拷菥锟斤拷锟斤拷锟较拷锟斤拷诘锟斤拷锟斤拷停锟斤拷锟窖拷锟矫撅拷锟斤拷锟斤拷息之锟斤拷锟酵拷锟斤拷锟斤拷锟较�
+ 	    * 锟斤拷时锟斤拷锟斤拷薪锟斤拷锟斤拷锟斤拷锟�
+ 	    * 只取前十锟斤拷锟斤拷息
  	    */
 String sql=
 "select * from t_uims_info where m_type=?"+" and m_id !=?"+" order by m_date desc limit 10";
  	  int ID=Integer.parseInt(id);
      try {
- 		 ps=DBUtil.getConPst(sql);//��ȡ PreparedStatement����
- 		 ps.setString(1, type);//Ϊ��һ������ֵ
- 		 ps.setInt(2, ID);//Ϊ�ڶ�������ֵ
+ 		 ps=DBUtil.getConPst(sql);//锟斤拷取 PreparedStatement锟斤拷锟斤拷
+ 		 ps.setString(1, type);//为锟斤拷一锟斤拷锟斤拷锟斤拷值
+ 		 ps.setInt(2, ID);//为锟节讹拷锟斤拷锟斤拷锟斤拷值
  		simRs=ps.executeQuery();
- 		//ʵ��һ��List�б?���������ѯ��ݵĽ��
+ 		//实锟斤拷一锟斤拷List锟叫�锟斤拷锟斤拷锟斤拷锟斤拷锟窖拷锟捷的斤拷锟�
 			 simList = new ArrayList<Info>();
 				while(simRs.next()){
 					  Info info=new Info();
@@ -332,9 +333,9 @@ String sql=
 					  info.setPhone(simRs.getString("m_ph"));
 					  info.setName(simRs.getString("m_name"));
 					  info.setMail(simRs.getString("m_mail"));	
-					  simList.add(info);//������д��list��
+					  simList.add(info);//锟斤拷锟斤拷锟斤拷写锟斤拷list锟斤拷
 				  }
-				DBUtil.close(ps, simRs);//�ر�rs,ps,con
+				DBUtil.close(ps, simRs);//锟截憋拷rs,ps,con
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

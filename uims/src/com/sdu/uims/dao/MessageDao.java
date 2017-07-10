@@ -40,9 +40,9 @@ public class MessageDao {
         return list;
     }
     
-    public int messageCount(){
+    public int messageCount(String id){
         DBUtil db = new DBUtil();
-        String sql = "select count(*) from T_SYS_MESSAGE";
+        String sql = "select count(*) from T_SYS_MESSAGE where m_ph='"+id+"';";
         int count = 0;
         try {
         	ResultSet rs = db.getConPst(sql).executeQuery();

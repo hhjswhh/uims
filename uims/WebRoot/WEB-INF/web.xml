@@ -13,6 +13,24 @@
     <servlet-name>UserServlet</servlet-name>
     <servlet-class>com.sdu.uims.controller.UserServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>PersonalServlet</servlet-name>
+    <servlet-class>com.sdu.uims.controller.PersonalServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>UploadServlet</servlet-name>
+    <servlet-class>com.sdu.uims.controller.UploadServlet</servlet-class>
+  </servlet>
+
+  
+  <servlet-mapping>
+    <servlet-name>PersonalServlet</servlet-name>
+    <url-pattern>/servlet/PersonalServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UploadServlet</servlet-name>
+    <url-pattern>/servlet/UploadServlet</url-pattern>
+  </servlet-mapping>
 
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>

@@ -18,7 +18,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="description" content="This is my page">
 	
 	<link rel="stylesheet" type="text/css" href="uims/css/personalLeft.css">
-
+	<script type="text/javascript">
+		//点击history之后实现表单的提交
+		function viewHistoryMessage(){
+			document.getElementById("historyMessage").submit();
+			return true;
+		}
+	</script>
   </head>
   
   <body>
@@ -34,22 +40,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   			<div id="options">
   				<div id="modifyInfo" class="option">
   					<div class="optionsButton">
-  						<a href="uims/pages/personalCenter/modifyPersonalInfo.jsp" target="right">修改个人资料</a>
+  						<a href="servlet/PersonalServlet?methodNum=6" target="right">修改个人资料</a>
   					</div>
   				</div>
   				<div id="modifyPsd" class="option">
   					<div class="optionsButton">
-  						<a href="uims/pages/personalCenter/modifyPassword.jsp" target="right">修改密码</a>
+  						<a href="uims/pages/personalCenter/modifyPassword.jsp?changeResult=first" target="right">修改密码</a>
   					</div>
   				</div>
   				<div id="published" class="option">
   					<div class="optionsButton">
-  						<a href="uims/pages/personalCenter/historyMessage.jsp" target="right">历史信息</a>
+  							<a target="right" href="servlet/PersonalServlet?methodNum=4">历史信息</a>
   					</div>
   				</div>
   				<div id="messageList" class="option">
   					<div class="optionsButton">
-  						<a href="uims/pages/personalCenter/interactMessage.jsp" target="right">消息列表</a>
+  						<a href="servlet/PersonalServlet?methodNum=5" target="right">消息列表</a>
   					</div>
   				</div>
   			</div>

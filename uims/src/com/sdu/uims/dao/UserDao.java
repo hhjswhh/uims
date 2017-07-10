@@ -150,8 +150,14 @@ public class UserDao {
 
 		PreparedStatement pstm = null;
 		int result = -10;
+		char sex = '1';
+		if("male".equals(userSex)){
+			sex = '0';
+		}else{
+			sex = '1';
+		}
 		String sql = "UPDATE T_SYS_USER SET m_name='" + username + "', m_sex='"
-				+ userSex + "', m_mail='" + userMail + "', m_addr='" + userAddr
+				+ sex + "', m_mail='" + userMail + "', m_addr='" + userAddr
 				+ "', m_img='" + userImg + "' WHERE m_ph='" + userPhn + "';";
 
 		try {
